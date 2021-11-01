@@ -19,13 +19,13 @@ class TestUserAddToBasketFromProductPage:
 
     def test_user_cant_see_success_message(self, browser):
         link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207"
-        page = ProductPage(browser, link, timeout=1)
+        page = ProductPage(browser, link)
         page.open()
         page.should_not_be_success_message()
 
-    def user_user_can_add_product_to_basket(self, browser):
+    def test_user_can_add_product_to_basket(self, browser):
         link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207"
-        page = ProductPage(browser, link, timeout=1)
+        page = ProductPage(browser, link)
         page.open()
         page.should_not_be_success_message()
         product_name = page.get_product_name()
@@ -48,6 +48,7 @@ def test_guest_can_add_product_to_basket(browser, promo_code):
     product_name = page.get_product_name()
     product_price = page.get_product_price()
     page.add_product_to_basket()
+    page.solve_quiz_and_get_code()
     page.product_name_should_be_in_add_to_basket_messages(product_name)
     page.product_price_should_be_in_add_to_basket_messages(product_price)
 
