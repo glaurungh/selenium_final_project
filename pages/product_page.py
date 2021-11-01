@@ -4,14 +4,6 @@ import pytest
 
 class ProductPage(BasePage):
 
-    def test_guest_can_add_product_to_basket(self):
-        self.should_not_be_success_message()
-        product_name = self.get_product_name()
-        product_price = self.get_product_price()
-        self.add_product_to_basket()
-        self.product_name_should_be_in_add_to_basket_messages(product_name)
-        self.product_price_should_be_in_add_to_basket_messages(product_price)
-
     def add_product_to_basket(self):
         add_button = self.browser.find_element(*ProductPageLocators.ADD_TO_BASKET_BUTTON)
         add_button.click()

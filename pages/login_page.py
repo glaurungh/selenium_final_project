@@ -2,6 +2,17 @@ from .base_page import BasePage
 from .locators import LoginPageLocators
 
 class LoginPage(BasePage):
+
+    def register_new_user(self, email, password):
+        eml = self.browser.find_element(*LoginPageLocators.REGISTER_EMAIL_FIELD)
+        eml.send_keys(email)
+        pass1 = self.browser.find_element(*LoginPageLocators.REGISTER_PASS1_FIELD)
+        pass1.send_keys(password)
+        pass2 = self.browser.find_element(*LoginPageLocators.REGISTER_PASS2_FIELD)
+        pass2.send_keys(password)
+        submit = self.browser.find_element(*LoginPageLocators.REGISTER_SUBMIT)
+        submit.click()
+
     def should_be_login_page(self):
         self.should_be_login_url()
         self.should_be_login_form()

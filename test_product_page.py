@@ -2,6 +2,37 @@ from .pages.product_page import ProductPage
 from .pages.basket_page import BasketPage
 from .pages.login_page import LoginPage
 import pytest
+import time
+
+@pytest.mark.login_user
+class TestUserAddToBasketFromProductPage:
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/"
+        login_page = LoginPage(browser, link)
+        login_page.open()
+        login_page.go_to_login_page()
+        email = str(time.time()) + "@fakemail.org"
+        password = "GJgiew832uikgFU&*&bg"
+        login_page.register_new_user(email, password)
+        login_page.should_be_authorized_user()
+
+    def test_user_cant_see_success_message(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207"
+        page = ProductPage(browser, link, timeout=1)
+        page.open()
+        page.should_not_be_success_message()
+
+    def user_user_can_add_product_to_basket(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207"
+        page = ProductPage(browser, link, timeout=1)
+        page.open()
+        page.should_not_be_success_message()
+        product_name = page.get_product_name()
+        product_price = page.get_product_price()
+        page.add_product_to_basket()
+        page.product_name_should_be_in_add_to_basket_messages(product_name)
+        page.product_price_should_be_in_add_to_basket_messages(product_price)
 
 @pytest.mark.parametrize('promo_code', range(1))
 #@pytest.mark.parametrize('promo_code', range(10))
@@ -13,7 +44,12 @@ def test_guest_can_add_product_to_basket(browser, promo_code):
     link = f"{product_base_link}/?promo=offer{promo_code}"
     page = ProductPage(browser, link, timeout=1)
     page.open()
-    page.test_guest_can_add_product_to_basket()
+    page.should_not_be_success_message()
+    product_name = page.get_product_name()
+    product_price = page.get_product_price()
+    page.add_product_to_basket()
+    page.product_name_should_be_in_add_to_basket_messages(product_name)
+    page.product_price_should_be_in_add_to_basket_messages(product_price)
 
 @pytest.mark.xfail(reason="Test must fail")
 def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
